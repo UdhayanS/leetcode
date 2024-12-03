@@ -15,5 +15,5 @@ jobs:
       - name: Update README
         uses: leetcode-action/update-readme@latest
         with:
-          username: "<your-leetcode-username>"
+          username: "Udhayan_sk7"
           readme-path: "README.md"
