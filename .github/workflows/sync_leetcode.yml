@@ -1,0 +1,33 @@
+name: Sync Leetcode Solutions
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 */2 * *"  # Runs every two days at midnight
+
+jobs:
+  sync-leetcode:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Fetch LeetCode Solutions
+        run: |
+          pip install requests beautifulsoup4
+          python sync_leetcode.py
+        env:
+          LEETCODE_URL: "https://leetcode.com/u/Udhayan_sk7/"
+          DESTINATION_FOLDER: "problems"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LEETCODE_CSRF_TOKEN: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          LEETCODE_SESSION: ${{ secrets.LEETCODE_SESSION }}
+
+      - name: Commit Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add problems/
+          git commit -m "[LeetCode Sync] Update solutions"
+          git push
